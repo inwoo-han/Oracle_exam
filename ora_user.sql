@@ -102,3 +102,33 @@ WHERE table_name = 'EX2_8';
  INSERT INTO ex2_8 VALUES('','AA');
  
  INSERT INTO ex2_8 VALUES('AA','AA');
+
+
+
+
+CREATE TABLE ex2_9(
+num1 NUMBER
+CONSTRAINTS check1 CHECK ( num1 BETWEEN 1 AND 9 ),
+gender VARCHAR2(10)
+CONSTRAINTS check2 CHECK ( gender IN ('MALE', 'FEMALE'))
+);
+
+DROP TABLE ex2_9_1;
+SELECT constraint_name, constraint_type, table_name, search_condition
+FROM user_constraints
+WHERE table_name = 'EX2_9';
+
+INSERT INTO ex2_9 VALUES (10,'MAN');
+
+INSERT INTO ex2_9 VALUES (5,'FEMALE');
+
+
+CREATE TABLE ex2_10(
+Col1 VARCHAR2(10) NOT NULL,
+Col2 VARCHAR2(10) NULL,
+Create_date DATE DEFAULT SYSDATE);
+);
+
+INSERT INTO ex2_10 (col1, col2) VALUES ('AA','BB');
+
+SELECT * FROM EX2_10;
