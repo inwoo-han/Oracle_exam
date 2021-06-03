@@ -1,134 +1,70 @@
-CREATE TABLE ex2_1 (
-COLUMN1 CHAR(10),
-COLUMN2 VARCHAR2(10),
-COLUMN3 NVARCHAR2(10),
-COLUMN4 NUMBER
-);
+SELECT 지역,
+    SUM(AMT1) AS "201111",
+    SUM(AMT2) AS "201112",
+    SUM(AMT3) AS "201210",
+    SUM(AMT4) AS "201211",
+    SUM(AMT5) AS "201212",
+    SUM(AMT6) AS "201310",
+    SUM(AMT7) AS "201311"
+    
+    
 
-INSERT INTO ex2_1 (column1, column2) VALUES ('abc', 'abc');
+FROM (SELECT region 지역,
+                        CASE WHEN period = '201111' THEN LOAN_JAN_AMT ELSE 0 END AMT1,
+                        CASE WHEN period = '201112' THEN LOAN_JAN_AMT ELSE 0 END AMT2,
+                        CASE WHEN period = '201210' THEN LOAN_JAN_AMT ELSE 0 END AMT3,
+                        CASE WHEN period = '201211' THEN LOAN_JAN_AMT ELSE 0 END AMT4,
+                        CASE WHEN period = '201212' THEN LOAN_JAN_AMT ELSE 0 END AMT5,
+                        CASE WHEN period = '201310' THEN LOAN_JAN_AMT ELSE 0 END AMT6,
+                        CASE WHEN period = '201311' THEN LOAN_JAN_AMT ELSE 0 END AMT7
+            FROM KOR_LOAN_STATUS
+                        )
+GROUP BY 지역
+ORDER BY 지역;
 
-SELECT column1, LENGTH(column1) as len1,
-       column2, LENGTH(column2) as len2
- FROM ex2_1;
- 
- CREATE TABLE ex2_2(
-    COLUMN1 VARCHAR2(3),
-    COLUMN2 VARCHAR2(3 byte),
-    COLUMN3 VARCHAR2(3 char)
-);
+SELECT REGION,
+    SUM(CASE WHEN PERIOD = '201111' THEN LOAN_JAN_AMT ELSE 0 END) "11년 11월",
+    SUM(CASE WHEN PERIOD = '201112' THEN LOAN_JAN_AMT ELSE 0 END) "11년 12월",
+    SUM(CASE WHEN PERIOD = '201210' THEN LOAN_JAN_AMT ELSE 0 END) "12년 10월",
+    SUM(CASE WHEN PERIOD = '201211' THEN LOAN_JAN_AMT ELSE 0 END) "12년 11월",
+    SUM(CASE WHEN PERIOD = '201212' THEN LOAN_JAN_AMT ELSE 0 END) "12년 12월",
+    SUM(CASE WHEN PERIOD = '201310' THEN LOAN_JAN_AMT ELSE 0 END) "13년 10월",
+    SUM(CASE WHEN PERIOD = '201311' THEN LOAN_JAN_AMT ELSE 0 END) "13년 11월"
+FROM KOR_LOAN_STATUS
+GROUP BY REGION;
 
-INSERT INTO ex2_2 VALUES('abc', 'abc', 'abc');
 
-SELECT column1, LENGTH(column1) AS len1,
-       column2, LENGTH(column1) AS len2,
-       column3, LENGTH(column1) AS len3
-FROM ex2_2;
+select region 지역,
+sum(case when period = '201111' then loan_jan_amt else 0 end) "201111",
+sum(case when period = '201112' then loan_jan_amt else 0 end) "201112",
+sum(case when period = '201210' then loan_jan_amt else 0 end) "201210",
+sum(case when period = '201211' then loan_jan_amt else 0 end) "201211",
+sum(case when period = '201212' then loan_jan_amt else 0 end) "201212",
+sum(case when period = '201310' then loan_jan_amt else 0 end) "201310",
+sum(case when period = '201311' then loan_jan_amt else 0 end) "201311"
+from kor_loan_status
+group by region;
 
-INSERT INTO ex2_2  (column3) VALUES('홍길동');
-       
- SELECT column3, LENGTH(column3) AS len3, LENGTHB(column3) AS bytelen
- FROM ex2_2;
 
-CREATE TABLE ex2_3(
-COL_INT INTEGER,
-COL_DEC DECIMAL,
-COL_NUM NUMBER
-);
+SELECT a.employee_id, a.emp_name, a.department_id, b.department_name
+FROM employees a,
+departments b
+WHERE a.department_id = b.department_id
+ORDER BY employee_id;
 
-SELECT column_id, column_name, data_type, data_length
-    FROM user_tab_cols
-    WHERE table_name = 'EX2_3'
-    ORDER BY column_id;
+SELECT department_id, department_name
+FROM departments a
+WHERE EXISTS ( SELECT *
+                FROM employees b
+                WHERE a.department_id = b.department_id
+                AND b.salary > 3000)
+ORDER BY a.department_id;
 
-CREATE TABLE EX2_4(
-    COL_FLOT1 FLOAT(32),
-    COL_FLOT2 FLOAT
-);
-
-INSERT INTO ex2_4 (col_flot1, col_flot2) VALUES (1234567891234, 1234567891234);
-
-CREATE TABLE EX2_5(
-    COL_DATE DATE,
-    COL_TIMESTAMP TIMESTAMP
-);
-
-INSERT INTO EX2_5 VALUES (SYSDATE, SYSTIMESTAMP);
+SELECT department_id, department_name
+FROM departments;
 
 SELECT *
-FROM EX2_5;
+                FROM departments a, employees b
+                WHERE a.department_id = b.department_id;
 
 
-CREATE TABLE EX2_6(
-    COL_NULL VARCHAR2(10),
-    COL_NOT_NULL VARCHAR2(10) NOT NULL
-);
-
-INSERT INTO EX2_6 VALUES ('AA','BB');
-
-SELECT constraint_name, constraint_type, table_name, search_condition
-FROM user_constraints
-WHERE table_name = 'EX2_6';
-
-CREATE TABLE ex2_7 (
-    COL_UNIQUE_NULL     VARCHAR2(10) UNIQUE,
-    COL_UNIQUE_NNULL    VARCHAR2(10) UNIQUE NOT NULL,
-    COL_UNIQUE          VARCHAR2(10),
-    CONSTRAINTS unique_nm1 UNIQUE (COL_UNIQUE)
-);
-
-SELECT constraint_name, constraint_type, table_name, search_condition
- FROM user_constraints
- WHERE table_name = 'EX2_7';
- 
-INSERT INTO ex2_7 VALUES('AA', 'AA', 'AA');
-
-INSERT INTO ex2_7 VALUES('AA', 'AA', 'AA');
-
-INSERT INTO ex2_7 VALUES('BB', 'BB', 'BB');
-
-INSERT INTO ex2_7 VALUES('', 'CC', 'CC');
-
-INSERT INTO ex2_7 VALUES('DD', 'DD', 'DD');
-
-CREATE TABLE ex2_8(
-    COL1 VARCHAR2(10) PRIMARY KEY,
-    COL2 VARCHAR2(10)
-);
-
-SELECT constraint_name, constraint_type, table_name, search_condition
-FROM user_constraints
-WHERE table_name = 'EX2_8';
- 
- INSERT INTO ex2_8 VALUES('','AA');
- 
- INSERT INTO ex2_8 VALUES('AA','AA');
-
-
-
-
-CREATE TABLE ex2_9(
-num1 NUMBER
-CONSTRAINTS check1 CHECK ( num1 BETWEEN 1 AND 9 ),
-gender VARCHAR2(10)
-CONSTRAINTS check2 CHECK ( gender IN ('MALE', 'FEMALE'))
-);
-
-DROP TABLE ex2_9_1;
-SELECT constraint_name, constraint_type, table_name, search_condition
-FROM user_constraints
-WHERE table_name = 'EX2_9';
-
-INSERT INTO ex2_9 VALUES (10,'MAN');
-
-INSERT INTO ex2_9 VALUES (5,'FEMALE');
-
-
-CREATE TABLE ex2_10(
-Col1 VARCHAR2(10) NOT NULL,
-Col2 VARCHAR2(10) NULL,
-Create_date DATE DEFAULT SYSDATE);
-);
-
-INSERT INTO ex2_10 (col1, col2) VALUES ('AA','BB');
-
-SELECT * FROM EX2_10;
